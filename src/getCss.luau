@@ -4,6 +4,7 @@ type getCssImpl = {
     frame: (frame: Frame) -> (string),
     textLable: (textTable: TextLabel) -> (string),
     imageLabel: (imageLabel: ImageLabel) -> (string),
+    UIAspectRatioConstraint: (UIAspectRatioConstraint: UIAspectRatioConstraint) -> (string),
 };
 
 local getCss = {} :: getCssImpl;
@@ -82,12 +83,25 @@ function getCss.imageLabel(imageLabel)
     --// Image
     local Image = imageLabel.Image;
     result ..= `background-image: url('https://assetdelivery.roblox.com/v1/asset/?id={Image:sub(14)}');`;
-    result ..= 'background-size: contain;background-repeat: no-repeat;background-position: center;';
+    result ..= 'background-size: cover;background-repeat: no-repeat;background-position: center;';
 
     -- ImageColor & ImageTransparency
     local ImageColor = imageLabel.ImageColor3;
     local ImageTransparency = imageLabel.ImageTransparency;
     result ..= `filter: opacity({1 - ImageTransparency}) drop-shadow(0 0 0 rgb({ImageColor.R * 255}, {ImageColor.G * 255}, {ImageColor.B * 255}));`;
+
+    return result;
+end
+
+--// UIAGet Css
+function getCss.UIAspectRatioConstraint(UIAspectRatioConstraint)
+    local result = '';
+
+    local Frame = UIAspectRatioConstraint.Parent :: Frame | ImageLabel | TextLabel;
+
+    local AspectRatio = UIAspectRatioConstraint.AspectRatio
+    
+    
 
     return result;
 end
