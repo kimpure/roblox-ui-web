@@ -7,12 +7,8 @@ type cssControllerImpl = {
 
 local cssController = {} :: cssControllerImpl;
 
-
 function cssController.frame(frame)
-    local result = '';
     
-    return ''
 end
-
 
 return cssController;

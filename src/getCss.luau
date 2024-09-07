@@ -3,6 +3,7 @@
 type getCssImpl = {
     frame: (frame: Frame) -> (string),
     textLable: (textTable: TextLabel) -> (string),
+    imageLabel: (imageLabel: ImageLabel) -> (string),
 };
 
 local getCss = {} :: getCssImpl;
@@ -12,18 +13,18 @@ function getCss.frame(frame)
     local result = 'position: absolute;';
     
     --// size
-    local width = (frame.Size.X.Offset / 10) + (frame.Size.X.Scale * 100);
-    local height = (frame.Size.Y.Offset / 10) + (frame.Size.Y.Scale * 100);
-    result ..= `height: {height}vh; width: {width}vw;`;
-    
+    local width = frame.Size.X
+    local height = frame.Size.Y
+    result ..= `height: calc({height.Scale * 100}% + {height.Offset}px); width: calc({width.Scale * 100}% + {width.Offset}px);`;
+
     --// AnchordPoint
     local AnchordPoint = { x = frame.AnchorPoint.X * 100, y = frame.AnchorPoint.Y * 100 };
-    result ..= `transform: translate(-{AnchordPoint.x}%, -{AnchordPoint.y}%);`;
+    result ..= `transform: translate({AnchordPoint.x}%, {AnchordPoint.y}%);`;
     
     --// position
-    local left = (frame.Position.X.Offset / 10) + (frame.Position.X.Scale * 100);
-    local top = (frame.Position.Y.Offset / 10) + (frame.Position.Y.Scale * 100);
-    result ..= `left: {left}vw; top: {top}vh;`;
+    local left = frame.Position.X
+    local top = frame.Position.Y
+    result ..= `left: calc({left.Scale * 100}% + {left.Offset}px); top: calc({top.Scale * 100}% + {top.Offset}px);`;
 
     --// Background Color & Background Transparency
     local BackgroundColor = frame.BackgroundColor3;
@@ -38,6 +39,10 @@ function getCss.frame(frame)
     --// Rotation
     local Rotation = frame.Rotation;
     result ..= `transform: rotate({Rotation}deg);`;
+
+    --// Z-Index
+    local ZIndex = frame.ZIndex;
+    result ..= `z-index: {ZIndex};`;
 
     return result
 end
@@ -69,6 +74,14 @@ function getCss.textLable(textLable)
     result ..= `align-items: { if TextYAlignment.Value == 0 then 'start' elseif TextYAlignment.Value == 1 then 'center' else 'end' };`;
 
     return result; 
+end
+
+function getCss.imageLabel(imageLabel)
+    local result = getCss.frame(imageLabel :: any);
+
+    
+    
+    return result;
 end
 
 return getCss;
