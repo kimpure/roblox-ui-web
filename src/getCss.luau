@@ -22,8 +22,8 @@ function getCss.frame(frame)
     result ..= `transform: translate({AnchordPoint.x}%, {AnchordPoint.y}%);`;
     
     --// position
-    local left = frame.Position.X
-    local top = frame.Position.Y
+    local left = frame.Position.X;
+    local top = frame.Position.Y;
     result ..= `left: calc({left.Scale * 100}% + {left.Offset}px); top: calc({top.Scale * 100}% + {top.Offset}px);`;
 
     --// Background Color & Background Transparency
@@ -79,8 +79,16 @@ end
 function getCss.imageLabel(imageLabel)
     local result = getCss.frame(imageLabel :: any);
 
-    
-    
+    --// Image
+    local Image = imageLabel.Image;
+    result ..= `background-image: url('https://assetdelivery.roblox.com/v1/asset/?id={Image:sub(14)}');`;
+    result ..= 'background-size: contain;background-repeat: no-repeat;background-position: center;';
+
+    -- ImageColor & ImageTransparency
+    local ImageColor = imageLabel.ImageColor3;
+    local ImageTransparency = imageLabel.ImageTransparency;
+    result ..= `filter: opacity({1 - ImageTransparency}) drop-shadow(0 0 0 rgb({ImageColor.R * 255}, {ImageColor.G * 255}, {ImageColor.B * 255}));`;
+
     return result;
 end
 
