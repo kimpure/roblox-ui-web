@@ -5,6 +5,7 @@ type getCssImpl = {
 	textLable: (textTable: TextLabel) -> (string),
 	imageLabel: (imageLabel: ImageLabel) -> (string),
 	UIAspectRatioConstraint: (UIAspectRatioConstraint: UIAspectRatioConstraint) -> (string),
+    UICorner: (UICorner: UICorner) -> (string),
 };
 
 local getCss = {} :: getCssImpl;
@@ -18,15 +19,11 @@ function getCss.frame(frame)
 	local height = frame.Size.Y
 	result ..= `height: calc({height.Scale * 100}% + {height.Offset}px); width: calc({width.Scale * 100}% + {width.Offset}px);`;
 
-	--// AnchordPoint
-	local AnchordPoint = { x = frame.AnchorPoint.X * 100, y = frame.AnchorPoint.Y * 100 };
-	result ..= `transform: translate({AnchordPoint.x}%, {AnchordPoint.y}%);`;
-
 	--// position
 	local left = frame.Position.X;
 	local top = frame.Position.Y;
 	result ..= `left: calc({left.Scale * 100}% + {left.Offset}px); top: calc({top.Scale * 100}% + {top.Offset}px);`;
-
+	
 	--// Background Color & Background Transparency
 	local BackgroundColor = frame.BackgroundColor3;
 	local BackgroundTransparency = frame.BackgroundTransparency;
@@ -37,9 +34,10 @@ function getCss.frame(frame)
 	local BoderColor = frame.BorderColor3;
 	result ..= `border: {BorderSizePixel}px solid rgb({BoderColor.R * 255}, {BoderColor.G * 255}, {BoderColor.B * 255});`;
 
-	--// Rotation
+	--// Rotation & AnchordPoint
+	local AnchordPoint = { x = frame.AnchorPoint.X * 100, y = frame.AnchorPoint.Y * 100 };
 	local Rotation = frame.Rotation;
-	result ..= `transform: rotate({Rotation}deg);`;
+	result ..= `transform: translate(-{AnchordPoint.x}%, -{AnchordPoint.y}%) rotate({Rotation}deg);`;
 
 	--// Z-Index
 	local ZIndex = frame.ZIndex;
@@ -112,8 +110,19 @@ function getCss.UIAspectRatioConstraint(UIAspectRatioConstraint)
 		local height = Frame.Size.Y;
 		result ..= `max-height: calc({height.Scale * 100}% + {height.Offset}px); max-width: calc({width.Scale * 100}% + {width.Offset}px);`;    
 	end
-    
+
 	return result;
+end
+
+function getCss.UICorner(UICorner)
+    local result = '';
+
+	local CornerRadius = UICorner.CornerRadius
+
+    result ..= `border-radius: {CornerRadius.Scale * 100 + CornerRadius.Offset}px;`;
+	result ..= `border: 0px;`;
+
+    return result;
 end
 
 return getCss;
