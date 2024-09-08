@@ -101,24 +101,18 @@ function getCss.UIAspectRatioConstraint(UIAspectRatioConstraint)
 
 	local AspectRatio = UIAspectRatioConstraint.AspectRatio;
 	local AspectType = UIAspectRatioConstraint.AspectType.Name;
-	result ..= `padding-bottom: { 
-		if (UIAspectRatioConstraint.DominantAxis.Name == 'Width') then 
-			AspectRatio 
-			else 
-			1  
-	} / { 
-		if (UIAspectRatioConstraint.DominantAxis.Name ~= 'Width') then 
-			AspectRatio 
-			else 
-			1
-	};`;
+
+	result ..= if (UIAspectRatioConstraint.DominantAxis.Name == 'Width') then
+            `height: auto;aspect-ratio: {AspectRatio} / 1;`
+		else 
+			`Width: auto;aspect-ratio: 1 / {AspectRatio};`
+
 	if AspectType == 'FitWithinMaxSize' then
 		local width = Frame.Size.X;
 		local height = Frame.Size.Y;
 		result ..= `max-height: calc({height.Scale * 100}% + {height.Offset}px); max-width: calc({width.Scale * 100}% + {width.Offset}px);`;    
 	end
-
-
+    
 	return result;
 end
 
