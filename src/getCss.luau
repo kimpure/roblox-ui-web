@@ -37,7 +37,7 @@ function getCss.frame(frame)
 	--// Rotation & AnchordPoint
 	local AnchordPoint = { x = frame.AnchorPoint.X * 100, y = frame.AnchorPoint.Y * 100 };
 	local Rotation = frame.Rotation;
-	result ..= `transform: translate(-{AnchordPoint.x}%, -{AnchordPoint.y}%) rotate({Rotation}deg);`;
+	result ..= `transform: translate({AnchordPoint.x * -1}%, -{AnchordPoint.y * -1}%) rotate({Rotation}deg);`;
 
 	--// Z-Index
 	local ZIndex = frame.ZIndex;
